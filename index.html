@@ -55,8 +55,7 @@
             transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
         }
 
-        .noTransition {
-            transition: all 0s;
+        .twelve-hand {
             display: none;
         }
     </style>
@@ -67,26 +66,42 @@
             <div class="hand hour-hand"></div>
             <div class="hand min-hand"></div>
             <div class="hand second-hand"></div>
+            <div class="hand twelve-hand"></div>
         </div>
     </div>
     <script>
         const secondHand = document.querySelector('.second-hand');
         const minsHand = document.querySelector('.min-hand');
         const hoursHand = document.querySelector('.hour-hand');
+        const twelve = document.querySelector('.twelve-hand');
         function setDate() {
             const now = new Date();
             const seconds = now.getSeconds();
             secondsDegrees = ((seconds / 60) * 360) + 90;
-            secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
-
+            // secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+            moveHand(secondHand, secondsDegrees);
             const mins = now.getMinutes();
             const minsDegrees = ((mins / 60) * 360) + 90;
-            minsHand.style.transform = `rotate(${minsDegrees}deg)`;
-
+            // minsHand.style.transform = `rotate(${minsDegrees}deg)`;
+            moveHand(minsHand, minsDegrees);
             const hours = now.getHours();
             const hoursDegrees = ((hours / 12) * 360) + 90;
-            hoursHand.style.transform = `rotate(${hoursDegrees}deg)`;
-            
+            // hoursHand.style.transform = `rotate(${hoursDegrees}deg)`;
+            moveHand(hoursHand, hoursDegrees);
+        }
+
+        function moveHand(hand, degree) {
+            if (degree === 90) {
+                hand.style.display = 'none';
+                twelve.style.display = 'block';
+                hand.style.transform = `rotate(${degree}deg)`;
+            } else if (degree === 96 || (hand == hoursHand && degree === 120)) {
+                hand.style.display = 'block';
+                twelve.style.display = 'none';
+                hand.style.transform = `rotate(${degree}deg)`;
+            } else {
+                hand.style.transform = `rotate(${degree}deg)`;
+            }
         }
 
         setInterval(setDate, 1000);
